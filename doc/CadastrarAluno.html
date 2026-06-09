@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cadastro do Aluno</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 700px;
+    margin: auto;
+    background: white;
+    padding: 24px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+label {
+    display: block;
+    margin-top: 12px;
+    margin-bottom: 4px;
+    font-weight: bold;
+}
+
+input[type=text],
+input[type=email],
+input[type=password],
+textarea {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.radio-group,
+.checkbox-group,
+.turno-group {
+    margin-top: 8px;
+}
+
+.turno-group label,
+.radio-group label,
+.checkbox-group label {
+    font-weight: normal;
+    margin-right: 12px;
+}
+
+.error {
+    color: red;
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+.actions {
+    margin-top: 24px;
+    text-align: center;
+}
+
+button {
+    padding: 12px 20px;
+    cursor: pointer;
+}
+
+.icon-button {
+    margin-top: 12px;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Cadastro do Aluno</h1>
+
+    <label>Nome</label>
+    <input type="text" id="nome">
+    <div id="erroNome" class="error"></div>
+
+    <label>Sexo</label>
+    <div class="radio-group">
+        <label><input type="radio" name="sexo" value="Masculino"> Masculino</label>
+        <label><input type="radio" name="sexo" value="Feminino"> Feminino</label>
+    </div>
+    <div id="erroSexo" class="error"></div>
+
+    <label>Email</label>
+    <input type="email" id="email">
+    <div id="erroEmail" class="error"></div>
+
+    <label>Telefone</label>
+    <input type="text" id="telefone">
+    <div id="erroTelefone" class="error"></div>
+
+    <label>CEP</label>
+    <input type="text" id="cep">
+    <div id="erroCep" class="error"></div>
+
+    <label>Complemento</label>
+    <textarea id="complemento"></textarea>
+    <div id="erroComplemento" class="error"></div>
+
+    <label>Observação</label>
+    <textarea id="observacao"></textarea>
+    <div id="erroObservacao" class="error"></div>
+
+    <label>Turno Disponível</label>
+    <div class="turno-group">
+        <label><input type="radio" name="turno" value="Manhã"> Manhã</label>
+        <label><input type="radio" name="turno" value="Tarde"> Tarde</label>
+        <label><input type="radio" name="turno" value="Noite"> Noite</label>
+    </div>
+    <div id="erroTurno" class="error"></div>
+
+    <label>Tecnologias de Interesse</label>
+
+    <div class="checkbox-group">
+        <label><input type="checkbox" id="android"> Mobile Android</label><br>
+        <label><input type="checkbox" id="ios"> Mobile IOS</label><br>
+        <label><input type="checkbox" id="java"> Java Backend</label><br>
+        <label><input type="checkbox" id="react"> React FrontEnd</label>
+    </div>
+
+    <div id="erroTecnologias" class="error"></div>
+
+    <label>
+        <input type="checkbox" id="novidades">
+        Receber novidades dos cursos
+    </label>
+
+    <label>Senha</label>
+    <input type="password" id="senha">
+    <div id="erroSenha" class="error"></div>
+
+    <div class="actions">
+        <button onclick="cadastrar()">
+            Cadastrar
+        </button>
+
+        <br>
+
+        <button class="icon-button" onclick="cadastrar()">
+            💾
+        </button>
+    </div>
+
+</div>
+
+<script>
+
+function limparErros() {
+    document.querySelectorAll('.error')
+        .forEach(e => e.innerText = '');
+}
+
+function cadastrar() {
+
+    limparErros();
+
+    let valido = true;
+
+    const nome = document.getElementById('nome').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const telefone = document.getElementById('telefone').value.trim();
+    const cep = document.getElementById('cep').value.trim();
+    const complemento = document.getElementById('complemento').value.trim();
+    const observacao = document.getElementById('observacao').value.trim();
+    const senha = document.getElementById('senha').value;
+
+    if(nome.length < 3){
+        document.getElementById('erroNome').innerText =
+            'Informe um nome válido';
+        valido = false;
+    }
+
+    const sexo =
+        document.querySelector('input[name="sexo"]:checked');
+
+    if(!sexo){
+        document.getElementById('erroSexo').innerText =
+            'Selecione o sexo';
+        valido = false;
+    }
+
+    const emailRegex =
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if(!emailRegex.test(email)){
+        document.getElementById('erroEmail').innerText =
+            'Email inválido';
+        valido = false;
+    }
+
+    if(telefone.replace(/\D/g,'').length < 10){
+        document.getElementById('erroTelefone').innerText =
+            'Telefone inválido';
+        valido = false;
+    }
+
+    if(cep.replace(/\D/g,'').length !== 8){
+        document.getElementById('erroCep').innerText =
+            'CEP inválido';
+        valido = false;
+    }
+
+    if(complemento === ''){
+        document.getElementById('erroComplemento').innerText =
+            'Complemento obrigatório';
+        valido = false;
+    }
+
+    if(observacao === ''){
+        document.getElementById('erroObservacao').innerText =
+            'Observação obrigatória';
+        valido = false;
+    }
+
+    const turno =
+        document.querySelector('input[name="turno"]:checked');
+
+    if(!turno){
+        document.getElementById('erroTurno').innerText =
+            'Selecione um turno';
+        valido = false;
+    }
+
+    const tecnologias =
+        document.querySelectorAll(
+            '#android:checked,#ios:checked,#java:checked,#react:checked'
+        );
+
+    if(tecnologias.length === 0){
+        document.getElementById('erroTecnologias').innerText =
+            'Selecione ao menos uma tecnologia';
+        valido = false;
+    }
+
+    if(senha.length < 8){
+        document.getElementById('erroSenha').innerText =
+            'A senha deve possuir pelo menos 8 caracteres';
+        valido = false;
+    }
+
+    if(valido){
+        alert('Cadastro realizado com sucesso!');
+    }
+}
+</script>
+
+</body>
+</html>
+```
