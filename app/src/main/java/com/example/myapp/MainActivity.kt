@@ -1,6 +1,9 @@
 package com.example.myapp
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.Button
@@ -22,7 +25,38 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val editTextNome = findViewById<EditText>(R.id.editTextNome)
 
+        editTextNome.setOnFocusChangeListener { _, hasFocus ->
+
+            if (!hasFocus) { // perdeu o foco
+
+                val nome = editTextNome.text.toString().trim()
+
+                if (nome.isEmpty()) {
+                    //editTextNome.error = "Nome é obrigatório"
+                } else if (nome.length < 3) {
+                    //editTextNome.error = "Nome deve ter pelo menos 3 caracteres"
+                } else {
+                    //editTextNome.error = null
+                }
+            }
+        }
+
+        editTextNome.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // Ação antes da mudança
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // Ação enquanto o usuário digita
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // Ação depois que o texto foi alterado
+                val textoDigitado = s.toString()
+            }
+        })
 
         val buttonSalvar = findViewById<Button>(R.id.buttonSalvar)
         val buttonSalvarImagem = findViewById<ImageButton>(R.id.buttonSalvarImagem)
@@ -145,6 +179,12 @@ class MainActivity : AppCompatActivity() {
                 Toast.LENGTH_LONG
             ).show()
         }
+    }
+
+    fun buttonSalvarClicou(view: View) {
+
+        Log.d("MainActivity", "O botão foi clicado!")
+
     }
 
 }
